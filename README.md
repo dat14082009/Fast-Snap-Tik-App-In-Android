@@ -1,5 +1,5 @@
 <div align="right">
-  🌐 <strong>English</strong> | <a href="README_vi.md">Tiếng Việt</a>
+  🌐 <strong>English</strong> | <a href="README-vi.md">Tiếng Việt</a>
 </div>
 # 🤖 Idea by Stone, Created by AI ✨
 

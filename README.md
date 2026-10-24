@@ -1,67 +1,74 @@
-# idea by Stone, create is AI
+<div align="right">
+  🌐 <strong>English</strong> | <a href="README_vi.md">Tiếng Việt</a>
+</div>
+# 🤖 Idea by Stone, Created by AI ✨
 
-Ứng dụng Android tải video TikTok và Douyin không dấu chìm. Chỉ dùng cho mục đích cá nhân, chủ sở hữu: Stone.
+📱 An Android application for downloading TikTok and Douyin videos without watermarks. Intended for personal use only. **Owner:** Stone.
 
-## Cách hoạt động
+## ⚙️ How It Works
 
-App không xử lý hình ảnh để xóa logo. App mở trang video TikTok, đọc dữ liệu nhúng trong trang, lấy đường link video gốc không logo trên CDN rồi tải thẳng về máy.
+The app does not process video frames to remove watermarks. Instead, it opens the TikTok video page, parses embedded data inside the page, retrieves the original watermark-free CDN video link, and downloads it directly to your device.
 
-1. Nhận link TikTok (kể cả `vt.tiktok.com`, `vm.tiktok.com`) hoặc Douyin (`v.douyin.com`, `www.douyin.com`, `iesdouyin.com`), tách URL khỏi văn bản chia sẻ (kể cả văn bản tiếng Trung), bỏ tham số theo dõi, theo dõi redirect, lấy video ID. `RoutingExtractor` chọn đường xử lý theo tên miền.
-2. `Extractor` lấy tiêu đề, tác giả, poster, thời lượng, các luồng video và luồng âm thanh. Thử **WebView ẩn** trước (là trình duyệt thật nên ít bị TikTok chặn), nếu thất bại thì dùng **OkHttp** làm dự phòng.
-3. `DownloadWorker` tải về `Download/TikTokSave` bằng MediaStore (không cần quyền lưu trữ), kèm cookie và User-Agent của WebView khi tải từ CDN.
+1. **🔗 Link Parsing:** Accepts TikTok links (including `vt.tiktok.com`, `vm.tiktok.com`) or Douyin links (`v.douyin.com`, `www.douyin.com`, `iesdouyin.com`), extracts the URLs from shared text (including Chinese text), strips tracking parameters, follows redirects, and extracts the video ID. `RoutingExtractor` selects the appropriate processing pipeline based on the domain name.
+2. **🕵️ Data Extraction:** `Extractor` fetches title, author, poster, duration, video streams, and audio streams. It tries a **headless WebView** first (a real browser environment, less likely to be blocked by TikTok), falling back to **OkHttp** if that fails.
+3. **📥 Downloading:** `DownloadWorker` saves files to `Download/TikTokSave` using MediaStore (no broad storage permissions required), attaching the WebView's cookies and User-Agent when fetching content from the CDN.
 
-## Cấu trúc
+## 🏗️ Architecture & Structure
 
-| Package | Vai trò |
-|---|---|
-| `extractor` | Interface `Extractor`; `RoutingExtractor` (chọn TikTok/Douyin theo tên miền); TikTok: `WebViewExtractor` (chính), `TikTokWebExtractor` (OkHttp, dự phòng), `FallbackExtractor`; Douyin: `DouyinWebExtractor` + `DouyinParsing` (đọc `RENDER_DATA`/`_ROUTER_DATA`, nguồn `<video>`, URL bắt từ mạng); `TikTokPageParser` (đọc dữ liệu dùng chung), `LinkParser`, `ExportOptions` (danh sách tùy chọn xuất dạng dữ liệu) |
-| `download` | WorkManager, lưu MediaStore, thông báo tiến trình (có nút Hủy) |
-| `data` | DataStore (theme, chế độ chia sẻ), Room (History), cache poster |
-| `ui` | Compose + Material 3, 3 theme dùng chung một bảng token (`ui/theme/Tokens.kt`) |
+| Package | Role | 
+| ----- | ----- | 
+| 📦 `extractor` | `Extractor` interface; `RoutingExtractor` (routes TikTok/Douyin by domain); TikTok: `WebViewExtractor` (primary), `TikTokWebExtractor` (OkHttp fallback), `FallbackExtractor`; Douyin: `DouyinWebExtractor` + `DouyinParsing` (parses `RENDER_DATA`/`_ROUTER_DATA`, `<video>` source, network-captured URLs); `TikTokPageParser` (common data parser), `LinkParser`, `ExportOptions` (data export options) | 
+| ⬇️ `download` | WorkManager, MediaStore storage, progress notification (with Cancel action) | 
+| 💾 `data` | DataStore (theme, share mode), Room (History database), poster cache | 
+| 🎨 `ui` | Jetpack Compose + Material 3, 3 themes sharing a single token table (`ui/theme/Tokens.kt`) | 
 
-Thông số: min API 29, target/compile API 35, Kotlin 2.0.21, AGP 8.7.3, Gradle 8.9. Phiên bản hiện tại: xem `CHANGELOG.md`.
+**📊 Specifications:** Min API 29, Target/Compile API 35, Kotlin 2.0.21, AGP 8.7.3, Gradle 8.9. For the current version details, see `CHANGELOG.md`.
 
-## Sử dụng
+## 🚀 Usage
 
-- Chia sẻ video từ TikTok, chọn app này.
-- Lần chia sẻ đầu tiên hiện hộp thoại chọn chế độ: **A** mở app và tự dán link, tự bấm Gỡ dấu chìm; **B** tải ngầm MP4 chất lượng cao nhất kèm thông báo tiến trình.
-- Đổi chế độ sau này: nhấn giữ biểu tượng bánh răng ở màn chính.
-- Cài đặt có 3 mục: About, Theme, History.
-- Âm thanh lưu đúng định dạng gốc của nguồn (mp3 hoặc m4a).
+* 📤 Share a video from TikTok and select this app.
+* 🛠️ On the first share, a dialog prompts you to choose a mode:
+  * **Mode A**: Opens the app, auto-pastes the link, and triggers "Remove Watermark".
+  * **Mode B**: Downloads highest quality MP4 in the background with progress notifications.
+* ⚙️ Change mode anytime by long-pressing the gear icon on the main screen.
+* 🎛️ Settings includes 3 sections: About, Theme, and History.
+* 🎵 Audio files are saved in their native source format (`.mp3` or `.m4a`).
 
-## Build APK
+## 🔨 Building the APK
 
-**Cách 1: GitHub Actions.** Tạo repository, đẩy toàn bộ project lên (cần cả thư mục ẩn `.github`). Vào tab Actions, chạy "Build APK", tải artifact `idea-by-stone-apk`.
+**🌐 Method 1: GitHub Actions**
+Create a repository and push the entire project (including the hidden `.github` folder). Go to the **Actions** tab, run the "Build APK" workflow, and download the `idea-by-stone-apk` artifact.
 
-**Cách 2: Android Studio.** File, Open, chọn thư mục project, chờ Gradle sync, rồi Build, Build APK(s). Tệp nằm ở `app/build/outputs/apk/debug/app-debug.apk`.
+**💻 Method 2: Android Studio**
+Go to `File` > `Open`, select the project folder, wait for Gradle sync to finish, then go to `Build` > `Build APK(s)`. The compiled file will be located at `app/build/outputs/apk/debug/app-debug.apk`.
 
-APK được ký bằng khóa debug, đủ để cài cho cá nhân và bạn bè (cần bật cài từ nguồn không xác định).
+*Note: The APK is signed with a debug key, suitable for personal installation and sharing with friends (requires enabling "Install from unknown sources").*
 
-## Khi app báo lỗi lấy dữ liệu
+## ⚠️ Troubleshooting Extraction Errors
 
-- **"TikTok yêu cầu xác minh"**: bấm nút **Xác minh với TikTok**, giải bước xác minh trong trang hiện ra, chờ video hiện rồi bấm **Xong**. App tự thử lại. Cookie được lưu cho các lần sau.
-- **"Không đọc được dữ liệu từ TikTok"**: bấm nút **Mở trang TikTok để xem** để thấy TikTok đang hiển thị gì (captcha, đòi đăng nhập, video không khả dụng...). Thông báo lỗi liệt kê tên các khóa dữ liệu mà trang trả về, dùng để chẩn đoán. Trang dành cho điện thoại dùng khóa `webapp.reflow.video.detail`, trang máy tính dùng `webapp.video-detail`; app đọc được cả hai.
-- **Thông báo có chi tiết trong ngoặc vuông** (ví dụ `[WebView: ...; OkHttp: HTTP 403]`): gửi nguyên dòng này khi cần chẩn đoán.
-- **Nếu vẫn không đọc được**: TikTok có thể đã đổi cấu trúc trang. Logic đọc dữ liệu nằm trong `TikTokPageParser.kt`; cách tải trang nằm trong `WebViewExtractor.kt` và `TikTokWebExtractor.kt`. UI và phần tải không bị ảnh hưởng. Có thể thay bằng implementation khác tại `AppContainer.extractor`.
+* 🛡️ **"TikTok requires verification"**: Tap the **Verify with TikTok** button, solve the captcha/verification step on the loaded page, wait for the video to show up, then tap **Done**. The app will automatically retry. Cookies are saved for future requests.
+* ❌ **"Failed to read data from TikTok"**: Tap **Open TikTok page to view** to see what TikTok is displaying (captcha, login prompt, video unavailable, etc.). The error message lists data key names returned by the page for diagnostic purposes. Mobile pages use `webapp.reflow.video.detail` while desktop pages use `webapp.video-detail`; the app supports both.
+* 📋 **Error messages with bracketed details** (e.g., `[WebView: ...; OkHttp: HTTP 403]`): Copy and provide this entire string when seeking diagnostic help.
+* 🔄 **If issues persist**: TikTok may have updated its page structure. Parsing logic resides in `TikTokPageParser.kt`, while page-fetching logic resides in `WebViewExtractor.kt` and `TikTokWebExtractor.kt`. UI and download logic remain unaffected. Alternative implementations can be wired in `AppContainer.extractor`.
 
-## Lưu ý
+## 🛑 Disclaimer
 
-Tải video có thể vi phạm điều khoản của TikTok và quyền tác giả của người đăng. Hãy tôn trọng quyền tác giả.
+Downloading videos may violate TikTok's Terms of Service and copyright laws. Please respect content creators' intellectual property.
 
-## Douyin
+## 📌 Douyin Notes
 
-- Dùng WebView ẩn, không có thuật toán ký (`X-Bogus`/`a_bogus`) trong app.
-- Luồng không logo là `play_addr`; `download_addr` (có logo) không bao giờ được dùng. URL `/playwm/` được đổi thành `/play/`.
-- Cấu trúc dữ liệu của Douyin thay đổi thường xuyên và phần này chưa được kiểm chứng với Douyin thật. Khi lỗi, thông báo liệt kê nguồn dữ liệu tìm thấy và tên khóa gốc; nút **Mở trang Douyin để xem** cho thấy Douyin đang hiển thị gì.
-- Nếu Douyin đòi xác minh, nút **Xác minh với Douyin** mở trang để bạn giải bước đó một lần.
+* 👻 Uses a headless WebView without requiring custom client-side signing algorithms (`X-Bogus` / `a_bogus`).
+* 🔗 The watermark-free stream URL is `play_addr`; `download_addr` (watermarked) is never used. `/playwm/` URLs are automatically rewritten to `/play/`.
+* 🧩 Douyin's data structures change frequently and may vary. If an error occurs, the notification logs detected data sources and raw key names; the **Open Douyin page to view** button helps inspect what Douyin is serving.
+* 🛡️ If Douyin requests verification, the **Verify with Douyin** button opens an inline browser window to complete the verification step once.
 
-## Bài đăng dạng ảnh
+## 📸 Photo / Image Posts
 
-- Khi link là bài ảnh (TikTok `/photo/`, Douyin `/note/`), các nút cấu hình video được thay bằng **Tải tất cả** và danh sách từng ảnh, mỗi ảnh có nút **Tải** riêng.
-- Ảnh lưu vào `Pictures/TikTokSave`. Định dạng gốc được giữ nếu Android đọc được (JPEG, PNG, WebP, GIF, BMP; HEIC từ Android 9; AVIF từ Android 12), nếu không thì chuyển sang JPEG.
-- Ảnh có watermark (`owner_watermark_image`, `download_url_list`...) không bao giờ được dùng.
-- Chế độ chia sẻ B (tải ngầm) gặp bài ảnh thì tải tất cả ảnh. Lịch sử ghi một mục cho mỗi lần tải ("N ảnh" khi tải tất cả, nút Mở sẽ mở ảnh đầu tiên).
+* 🖼️ When sharing a photo post (TikTok `/photo/`, Douyin `/note/`), video action buttons are replaced by **Download All** and an itemized image list with individual **Download** buttons.
+* 💾 Images are saved to `Pictures/TikTokSave`. Original file formats are retained if supported by Android (JPEG, PNG, WebP, GIF, BMP; HEIC from Android 9+; AVIF from Android 12+), otherwise converted to JPEG.
+* 🚫 Watermarked image URLs (`owner_watermark_image`, `download_url_list`, etc.) are explicitly excluded.
+* 📦 Share Mode B (background download) automatically downloads all images for photo posts. History logs one entry per batch download ("N photos" when downloading all; tapping Open targets the first image).
 
-## Quy ước phiên bản
+## 🏷️ Versioning Conventions
 
-Mỗi lần sửa bất kỳ thứ gì phải nâng `versionCode` (cộng 1) và `versionName` trong `app/build.gradle.kts` và ghi vào `CHANGELOG.md`, để Android luôn nhận ra đây là phiên bản mới và cài đè được lên bản cũ.
+🔄 For every code or configuration change, increment `versionCode` (+1) and update `versionName` in `app/build.gradle.kts`, then document changes in `CHANGELOG.md`. This ensures Android recognizes subsequent builds as valid updates over existing installations.

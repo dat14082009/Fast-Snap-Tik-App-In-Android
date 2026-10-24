@@ -1,7 +1,7 @@
 <div align="right">
   🌐 <a href="README.md">English</a> | <strong>Tiếng Việt</strong>
 </div>
-## Fast Snap Tik✨
+<h1>Fast Snap Tik ✨</h1>
 
 📱 Ứng dụng Android tải video TikTok và Douyin không dấu chìm. Chỉ dùng cho mục đích cá nhân, chủ sở hữu: Stone.
 

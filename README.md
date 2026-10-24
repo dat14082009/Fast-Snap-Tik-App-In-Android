@@ -1,7 +1,7 @@
 <div align="right">
   🌐 <strong>English</strong> | <a href="README-vn.md">Tiếng Việt</a>
 </div>
-## Fast Snap Tik✨
+<h1>Fast Snap Tik ✨</h1>
 
 📱 An Android application for downloading TikTok and Douyin videos without watermarks. Intended for personal use only. **Owner:** Stone.
 

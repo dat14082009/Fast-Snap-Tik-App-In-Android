@@ -32,13 +32,11 @@ App không xử lý hình ảnh để xóa logo. App mở trang video TikTok, đ
 - 🎛️ Cài đặt có 3 mục: About, Theme, History.
 - 🎵 Âm thanh lưu đúng định dạng gốc của nguồn (mp3 hoặc m4a).
 
-## 🔨 Build APK
+## 📥 Hướng dẫn Cài đặt
 
-**🌐 Cách 1: GitHub Actions.** Tạo repository, đẩy toàn bộ project lên (cần cả thư mục ẩn `.github`). Vào tab Actions, chạy "Build APK", tải artifact `idea-by-stone-apk`.
-
-**💻 Cách 2: Android Studio.** File, Open, chọn thư mục project, chờ Gradle sync, rồi Build, Build APK(s). Tệp nằm ở `app/build/outputs/apk/debug/app-debug.apk`.
-
-*APK được ký bằng khóa debug, đủ để cài cho cá nhân và bạn bè (cần bật cài từ nguồn không xác định).*
+1. Truy cập trang [Releases](../../releases) của kho lưu trữ này.
+2. Tải xuống file `.apk` mới nhất từ bản phát hành (release) gần nhất.
+3. Cài đặt như bình thường 
 
 ## ⚠️ Khi app báo lỗi lấy dữ liệu
 

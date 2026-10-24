@@ -38,7 +38,7 @@ The app does not process video frames to remove watermarks. Instead, it opens th
 
 1. Go to the [Releases](../../releases) page of this repository.
 2. Download the latest `.apk` file from the newest release.
-3. Install and try download tiktok/douyin video/picture. 
+3. Install apk like normal.
 
 ## ⚠️ Troubleshooting Extraction Errors
 

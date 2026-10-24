@@ -34,15 +34,11 @@ The app does not process video frames to remove watermarks. Instead, it opens th
 * 🎛️ Settings includes 3 sections: About, Theme, and History.
 * 🎵 Audio files are saved in their native source format (`.mp3` or `.m4a`).
 
-## 🔨 Building the APK
+## 📥 Installation
 
-**🌐 Method 1: GitHub Actions**
-Create a repository and push the entire project (including the hidden `.github` folder). Go to the **Actions** tab, run the "Build APK" workflow, and download the `idea-by-stone-apk` artifact.
-
-**💻 Method 2: Android Studio**
-Go to `File` > `Open`, select the project folder, wait for Gradle sync to finish, then go to `Build` > `Build APK(s)`. The compiled file will be located at `app/build/outputs/apk/debug/app-debug.apk`.
-
-*Note: The APK is signed with a debug key, suitable for personal installation and sharing with friends (requires enabling "Install from unknown sources").*
+1. Go to the [Releases](../../releases) page of this repository.
+2. Download the latest `.apk` file from the newest release.
+3. Install and try download tiktok/douyin video/picture. 
 
 ## ⚠️ Troubleshooting Extraction Errors
 
